@@ -1,7 +1,30 @@
 .home-content {
   margin-top: 80px;
-  padding: 20px;
   margin-left: 220px;
 
+  height: calc(100vh - 80px); /* full height minus navbar top space */
+  
+  display: flex;
+  justify-content: center;   /* horizontal center */
+  align-items: center;       /* vertical center */
+
   font-family: Arial, sans-serif;
+}
+.toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%); /* perfect horizontal centering */
+
+  padding: 12px 20px;
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+
+  z-index: 1000;
+  animation: fadeInOut 2s ease;
+}
+
+.toast.success {
+  background-color:   #0b1b2b;
 }

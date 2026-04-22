@@ -1,0 +1,163 @@
+/* 1. Main Wrapper (Matching .container style) */
+.vehicle-container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 24px;
+  background: #0b1b2b; /* Matching the dark table card */
+  border-radius: 16px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 2. Header & Search Area */
+.vehicle-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.vehicle-header input {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px 16px;
+  border-radius: 8px;
+  color: white;
+  width: 300px;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.vehicle-header input:focus {
+  border-color: #38bdf8;
+}
+
+/* Add Vehicle Button */
+.vehicle-header button {
+  background: #38bdf8;
+  color: #0b1b2b;
+  font-weight: 600;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.vehicle-header button:hover {
+  background: #7dd3fc;
+  transform: translateY(-1px);
+}
+
+/* 3. Table Styling */
+.vehicle-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.vehicle-table thead th {
+  padding: 16px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+}
+
+.vehicle-table tbody td {
+  padding: 16px;
+  font-size: 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+}
+
+.vehicle-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* 4. Action Buttons */
+.edit-btn {
+  background: rgba(250, 204, 21, 0.1);
+  color: #facc15;
+  border: 1px solid rgba(250, 204, 21, 0.2);
+  padding: 6px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.edit-btn:hover {
+  background: rgba(250, 204, 21, 0.2);
+  filter: brightness(1.2);
+}
+
+/* 5. Modal Re-Use (Ensuring it matches your pop-up style) */
+/* The Modal classes (modal, modal-content, modal-actions) 
+   should be shared globally to ensure they look the same. */
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.modal-actions button {
+  width: 120px;
+  padding: 10px 0;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+  border: none;
+}
+
+/* Cancel is the first button in your JS */
+.modal-actions button:first-child {
+  background: transparent;
+  color: #94a3b8;
+  border: 1px solid #334155;
+}
+
+.modal-actions button:first-child:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #f1f5f9;
+}
+
+/* Save is the second button in your JS */
+.modal-actions button:last-child {
+  background: #38bdf8;
+  color: #0b1b2b;
+}
+
+.modal-actions button:last-child:hover {
+  background: #7dd3fc;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+}
+.modal-content select {
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 8px;
+
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  color: #e2e8f0;
+  outline: none;
+
+  transition: border 0.2s, box-shadow 0.2s;
+
+  appearance: none; /* removes default arrow style */
+  cursor: pointer;
+}
+.modal-content select:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+}

@@ -6,6 +6,20 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [message, setMessage] = useState("");
+  const [type, setType] = useState(""); // success | error
+  const [show, setShow] = useState(false);
+
+  const showMessage = (msg, msgType = "success") => {
+    setMessage(msg);
+    setType(msgType);
+    setShow(true);
+
+    setTimeout(() => {
+      setShow(false);
+    }, 3000);
+  };
+
   const handleLogin = async () => {
     try {
       const res = await axios.post("http://localhost:5000/login", {
@@ -14,9 +28,15 @@ export default function Login() {
       });
 
       sessionStorage.setItem("token", res.data.token);
+
+      sessionStorage.setItem("loginMessage", res.data.message);
       window.location.href = "/home";
+
     } catch (err) {
-      alert(err.response?.data?.error || "Login failed");
+      showMessage(
+        err.response?.data?.error || "Login failed",
+        "error"
+      );
     }
   };
 
@@ -38,6 +58,13 @@ export default function Login() {
         />
 
         <button onClick={handleLogin}>Login</button>
+
+        {/* 🔔 Message */}
+        {show && (
+          <div className={`message ${type}`}>
+            {message}
+          </div>
+        )}
       </div>
     </div>
   );
