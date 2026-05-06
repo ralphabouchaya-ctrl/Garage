@@ -6,6 +6,7 @@ import { Eye, Pencil } from 'lucide-react';
 export default function Customers() {
     const [customers, setCustomers] = useState([]);
     const [search, setSearch] = useState('');
+    const [error, setError] = useState("");
     const [form, setForm] = useState({
         first_name: '',
         last_name: '',
@@ -26,7 +27,9 @@ export default function Customers() {
         const res = await axios.get('http://localhost:5000/customers');
         setCustomers(res.data);
     };
-
+    const isValidEmail = (email) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    };
     const handleSearch = async (value) => {
         setSearch(value);
 
@@ -41,6 +44,11 @@ export default function Customers() {
     };
 
     const handleSubmit = async () => {
+        if (!isValidEmail(form.email)) {
+            setError("Invalid email format");
+            return;
+        }
+        setError("");
         if (editId) {
             await axios.put(
                 `http://localhost:5000/customers/${editId}`,
@@ -131,40 +139,51 @@ export default function Customers() {
 
             {showModal && (
                 <div className="modal">
+
                     <div className="modal-content">
+                        {error && <p className="error-text">{error}</p>}
                         <h3>{editId ? 'Update' : 'Add'} Customer</h3>
 
-                        <input
-                            placeholder="First Name"
-                            value={form.first_name}
-                            onChange={(e) =>
-                                setForm({ ...form, first_name: e.target.value })
-                            }
-                        />
+                        <div className="field">
+                            <label>First Name</label>
+                            <input
+                                value={form.first_name}
+                                onChange={(e) =>
+                                    setForm({ ...form, first_name: e.target.value })
+                                }
+                            />
+                        </div>
 
-                        <input
-                            placeholder="Last Name"
-                            value={form.last_name}
-                            onChange={(e) =>
-                                setForm({ ...form, last_name: e.target.value })
-                            }
-                        />
+                        <div className="field">
+                            <label>Last Name</label>
+                            <input
+                                value={form.last_name}
+                                onChange={(e) =>
+                                    setForm({ ...form, last_name: e.target.value })
+                                }
+                            />
+                        </div>
 
-                        <input
-                            placeholder="Email"
-                            value={form.email}
-                            onChange={(e) =>
-                                setForm({ ...form, email: e.target.value })
-                            }
-                        />
+                        <div className="field">
+                            <label>Email</label>
+                            <input
+                                type="email"
+                                value={form.email}
+                                onChange={(e) =>
+                                    setForm({ ...form, email: e.target.value })
+                                }
+                            />
+                        </div>
 
-                        <input
-                            placeholder="Phone"
-                            value={form.phone}
-                            onChange={(e) =>
-                                setForm({ ...form, phone: e.target.value })
-                            }
-                        />
+                        <div className="field">
+                            <label>Phone</label>
+                            <input
+                                value={form.phone}
+                                onChange={(e) =>
+                                    setForm({ ...form, phone: e.target.value })
+                                }
+                            />
+                        </div>
 
                         <div className="modal-actions">
                             <button className="btn-cancel" onClick={() => setShowModal(false)}>

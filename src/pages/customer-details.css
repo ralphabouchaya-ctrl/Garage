@@ -66,10 +66,48 @@
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #94a3b8;
+  color: #dbe8fb;
   border-bottom: 2px solid rgba(255, 255, 255, 0.05);
 }
 
+/* Year dropdown wrapper */
+.select-search {
+  position: relative;
+}
+
+/* Dropdown (same style as your customer/vehicle dropdown) */
+.dropdown-year {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+
+  margin-top: 4px;
+  max-height: 180px;
+  overflow-y: auto;
+
+  z-index: 20;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+}
+
+/* Items */
+.dropdown-year .dropdown-item {
+  padding: 10px 16px;
+  cursor: pointer;
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  transition: 0.2s;
+}
+
+/* Hover effect (same as your theme) */
+.dropdown-year .dropdown-item:hover {
+  background: rgba(56, 189, 248, 0.1);
+  color: #38bdf8;
+}
 .vehicle-table tbody td {
   padding: 16px;
   font-size: 0.9rem;
@@ -155,6 +193,16 @@
   transition: border 0.2s, box-shadow 0.2s;
 
   appearance: none; /* removes default arrow style */
+  cursor: pointer;
+}
+.back-btn {
+  background: #0b1b2b;
+  color: #b5babe;
+  font-size: larger;
+  padding-right: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  border: none;
   cursor: pointer;
 }
 .modal-content select:focus {

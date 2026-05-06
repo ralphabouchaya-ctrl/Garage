@@ -1,0 +1,136 @@
+/* PAGE BACKGROUND */
+body {
+  background: #bcaf9d; /* beige background like your image */
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* MAIN CONTAINER */
+.invoice-page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 20px auto;
+  background: #e6d8b5;
+  padding: 30px;
+  box-sizing: border-box;
+  color: #000;
+}
+
+/* HEADER */
+.invoice-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.invoice-header h2 {
+  margin-bottom: 10px;
+}
+
+.invoice-header p {
+  margin: 3px 0;
+  font-size: 14px;
+}
+@media print {
+  .sidebar,
+  .topbar {
+    display: none !important;
+  }
+}
+/* TABLE */
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.invoice-table th {
+  background: #000;
+  color: #fff;
+  text-align: left;
+  padding: 8px;
+  font-size: 14px;
+}
+
+.invoice-table td {
+  border-bottom: 1px solid #000;
+  padding: 8px;
+  font-size: 14px;
+}
+
+/* TOTAL SECTION */
+.invoice-total {
+  margin-top: 30px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.invoice-total h3 {
+  border-top: 2px solid #000;
+  padding-top: 10px;
+  font-size: 18px;
+}
+
+/* BUTTONS */
+.invoice-actions {
+  margin-top: 30px;
+  display: flex;
+  gap: 10px;
+}
+
+.invoice-actions button {
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+.invoice-actions button:nth-child(1) {
+  background: #ccc;
+}
+
+.invoice-actions button:nth-child(2) {
+  background: #000;
+  color: #fff;
+}
+
+.invoice-actions button:nth-child(3) {
+  background: #2e7d32;
+  color: #fff;
+}
+
+/* PRINT STYLES */
+/* ================= PRINT MODE ================= */
+@media print {
+
+  /* Hide everything you don't want */
+  nav,
+  .sidebar,
+  .header,
+  .add-btn,
+  .action-buttons {
+    display: none !important;
+  }
+
+  /* Optional: remove page background */
+  body {
+    background: white !important;
+  }
+
+  .jobcard-container {
+    padding: 0;
+    background: white;
+    color: black;
+  }
+
+  /* Make invoice centered and clean */
+  .invoice-container {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  table {
+    background: white;
+    color: black;
+  }
+}

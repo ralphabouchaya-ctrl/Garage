@@ -2,22 +2,54 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+
+  min-height: 100vh; /* better than height */
+  padding: 20px;     /* prevents edge touching on mobile */
+  box-sizing: border-box;
+
   font-family: Arial, sans-serif;
 }
 
 .login-box {
-  width: 300px;
+  width: 100%;
+  max-width: 350px;   /* responsive cap */
+  
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+
+  padding: 20px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .login-box input {
-  padding: 10px;
+  padding: 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
 }
 
 .login-box button {
-  padding: 10px;
+  padding: 12px;
+  font-size: 14px;
   cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  background: #007bff;
+  color: white;
+}
+
+/* 🔽 Mobile fine-tuning */
+@media (max-width: 480px) {
+  .login-box {
+    max-width: 100%;
+    padding: 15px;
+  }
+
+  .login-box input,
+  .login-box button {
+    font-size: 16px; /* better tap usability */
+  }
 }

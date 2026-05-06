@@ -1,0 +1,282 @@
+/* --- MODAL OVERLAY --- */
+.jobcard-container {
+  background: #0b1b2b; /* Deep Navy from screenshot */
+  padding: 40px;
+  border-radius: 12px;
+  min-height: 100vh;
+  color: #e2e8f0;
+}
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+}
+.message {
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 6px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.message.success {
+  background: #16a34a;
+}
+
+.message.error {
+  background: #dc2626;
+}
+/* --- MAIN CARD --- */
+.modal-card, .modal-content {
+  background: #173361;
+  width: 100%;
+  max-width: 650px; /* Wider for the Job Card tasks */
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 32px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  animation: modalScale 0.2s ease-out;
+}
+
+@keyframes modalScale {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* --- HEADER & TEXT --- */
+.modal-header h2, .modal-content h3 {
+  margin: 0 0 24px 0;
+  font-size: 1.5rem;
+  color: #f8fafc;
+  font-weight: 700;
+}
+
+/* --- FORM LAYOUT --- */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative; /* For dropdown positioning */
+}
+
+.field label {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* --- INPUTS & SELECTS --- */
+.modal-card input, 
+.modal-content input,
+.modal-card select {
+  width: 100%;
+  padding: 12px 16px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  color: white;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.modal-card input:focus, 
+.modal-content input:focus {
+  outline: none;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+}
+
+.modal-card input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* --- DROPDOWN SEARCH --- */
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  margin-top: 4px;
+  z-index: 10;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+}
+
+.dropdown-item {
+  padding: 10px 16px;
+  cursor: pointer;
+  color: #e2e8f0;
+  font-size: 0.9rem;
+}
+
+.dropdown-item:hover {
+  background: rgba(56, 189, 248, 0.1);
+  color: #38bdf8;
+}
+
+.dropdown-item.add {
+  border-bottom: 1px solid #334155;
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+/* --- TASKS SECTION --- */
+.tasks-section {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.task-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 100px; /* Custom widths for task fields */
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.task-row input {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+}
+
+/* Add Task Button */
+.tasks-section button {
+  background: rgba(56, 189, 248, 0.1);
+  color: #38bdf8;
+  border: 1px dashed #38bdf8;
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* --- FOOTER / ACTIONS --- */
+.modal-footer, .modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.modal-footer button, .modal-actions button {
+  min-width: 100px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+/* Action: Save/Create */
+.modal-footer button:first-child, 
+.modal-actions button:last-child {
+  background: #38bdf8;
+  color: #0b1b2b;
+}
+
+.modal-footer button:first-child:hover,
+.modal-actions button:last-child:hover {
+  background: #7dd3fc;
+  transform: translateY(-1px);
+}
+
+/* Action: Cancel */
+.modal-footer button:last-child,
+.modal-actions button:first-child {
+  background: transparent;
+  color: #94a3b8;
+  border: 1px solid #334155;
+}
+
+.modal-footer button:last-child:hover,
+.modal-actions button:first-child:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #f1f5f9;
+}
+/* 🔽 TABLET */
+@media (max-width: 768px) {
+
+  .jobcard-container {
+    padding: 20px;
+  }
+
+  .modal-card, .modal-content {
+    padding: 20px;
+    max-height: 95vh;
+  }
+
+  /* Form becomes single column */
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  /* Tasks: reduce columns */
+  .task-row {
+    grid-template-columns: 1fr 1fr; /* stack fields in 2 cols */
+    gap: 8px;
+  }
+
+  /* Buttons stack better */
+  .modal-footer, .modal-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .modal-footer button,
+  .modal-actions button {
+    width: 100%;
+  }
+}
+
+
+/* 🔽 MOBILE (phones) */
+@media (max-width: 480px) {
+
+  .modal {
+    padding: 10px;
+  }
+
+  .modal-card, .modal-content {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  /* Tasks fully stacked */
+ .task-row {
+    display: flex;
+    flex-direction: column;
+  }
+  .task-row input {
+    font-size: 16px; /* better mobile typing */
+  }
+
+  /* Header text slightly smaller */
+  .modal-header h2,
+  .modal-content h3 {
+    font-size: 1.25rem;
+  }
+}

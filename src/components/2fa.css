@@ -1,0 +1,73 @@
+.twofa-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+
+  background: linear-gradient(#1f4e6e, #6d8f9f);
+}
+
+.twofa-box {
+  background: #fff;
+  padding: 25px;
+  border-radius: 15px;
+  text-align: center;
+
+  width: 100%;
+  max-width: 400px; /* responsive cap */
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+/* QR */
+.qr-section img {
+  width: 100%;
+  max-width: 180px;
+  height: auto;
+  margin: 10px 0;
+}
+
+/* OTP inputs */
+.code-inputs {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* better than space-between */
+  margin: 20px 0;
+  flex-wrap: wrap; /* prevents overflow */
+}
+
+.code-inputs input {
+  width: 45px;
+  height: 55px;
+  text-align: center;
+  font-size: 20px;
+
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+/* Button scoped (important fix) */
+.twofa-box button {
+  padding: 12px 20px;
+  background: #1f4e6e;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* 🔽 Mobile optimization */
+@media (max-width: 480px) {
+  .twofa-box {
+    padding: 20px;
+  }
+
+  .code-inputs input {
+    width: 40px;
+    height: 50px;
+    font-size: 18px;
+  }
+}

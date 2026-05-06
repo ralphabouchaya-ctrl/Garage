@@ -20,26 +20,38 @@ export default function Login() {
     }, 3000);
   };
 
-  const handleLogin = async () => {
-    try {
-      const res = await axios.post("http://localhost:5000/login", {
-        email,
-        password,
-      });
+ const handleLogin = async () => {
+  try {
+    const res = await axios.post("http://localhost:5000/login", {
+      email,
+      password,
+    });
 
-      sessionStorage.setItem("token", res.data.token);
+    // 🔐 Store userId for 2FA page
+    if (res.data.require2FASetup || res.data.require2FAVerify) {
+      sessionStorage.setItem("userId", res.data.userId);
 
+      // optional message
       sessionStorage.setItem("loginMessage", res.data.message);
-      window.location.href = "/home";
 
-    } catch (err) {
-      showMessage(
-        err.response?.data?.error || "Login failed",
-        "error"
-      );
+      // 👉 single 2FA page
+      window.location.href = "/2fa";
+      return;
     }
-  };
 
+    // (fallback - if you ever skip 2FA in future)
+    if (res.data.token) {
+      sessionStorage.setItem("token", res.data.token);
+      window.location.href = "/home";
+    }
+
+  } catch (err) {
+    showMessage(
+      err.response?.data?.error || "Login failed",
+      "error"
+    );
+  }
+};
   return (
     <div className="login-container">
       <div className="login-box">
