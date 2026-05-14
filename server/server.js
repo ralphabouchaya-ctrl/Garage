@@ -35,7 +35,7 @@ app.post("/login", async (req, res) => {
 
     const user = rows[0];
 
-    // 🔐 password check
+    // password check
     const sha2 = crypto.createHash("sha256").update(password).digest("hex");
 
     const isMatch =
@@ -46,7 +46,7 @@ app.post("/login", async (req, res) => {
       return res.status(401).json({ error: "Invalid email or password" });
     }
 
-    // 🔥 2FA LOGIC STARTS HERE
+    //  2FA LOGIC STARTS HERE
 
     // ❗ No 2FA yet → go to QR setup
     if (!user.google_2fa) {
@@ -76,12 +76,17 @@ app.post("/2fa/verify", async (req, res) => {
     [userId]
   );
 
+  if (!users.length) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
   const secret = users[0].google_2fa;
 
-  const verified = speakeasy.totp({
+  const verified = speakeasy.totp.verify({
     secret,
     encoding: "base32",
-    token
+    token,
+    window: 1
   });
 
   if (!verified) {
@@ -250,7 +255,15 @@ app.get("/vehicles/search", async (req, res) => {
 
   try {
     const [rows] = await db.query(
-      `SELECT * FROM vehicle 
+      `SELECT 
+      v.*,
+        m.id AS model_id,
+        m.name AS model_name,
+            e.id AS engine_id,
+        e.name AS engine_name
+      FROM vehicle v
+       LEFT JOIN car_model m ON v.model_id = m.id 
+       LEFT JOIN engine e ON v.engine_id = e.id
        WHERE cust_id = ?
        AND (model LIKE ? OR plate_number LIKE ?)  ORDER BY model ASC`,
       [cust_id, `%${query}%`, `%${query}%`]
@@ -646,6 +659,61 @@ app.put("/tasks/:id", async (req, res) => {
     res.status(500).json(err);
   }
 });
+app.delete("/tasks/:id", async (req, res) => {
+  try {
+
+    // get task info first
+    const [tasks] = await db.query(
+      "SELECT job_card_id FROM job_task WHERE task_id = ?",
+      [req.params.id]
+    );
+
+    if (!tasks.length) {
+      return res.status(404).json({
+        error: "Task not found"
+      });
+    }
+
+    const job_card_id = tasks[0].job_card_id;
+
+    // delete task
+    await db.query(
+      "DELETE FROM job_task WHERE task_id = ?",
+      [req.params.id]
+    );
+
+    // recalculate total fees
+    const [totalRows] = await db.query(
+      `
+      SELECT IFNULL(SUM(fees),0) AS total
+      FROM job_task
+      WHERE job_card_id = ?
+      `,
+      [job_card_id]
+    );
+
+    // update job card amount
+    await db.query(
+      `
+      UPDATE job_card
+      SET amount = ?
+      WHERE job_card_id = ?
+      `,
+      [totalRows[0].total, job_card_id]
+    );
+
+    // update overall status
+    await updateJobStatus(job_card_id);
+
+    res.json({
+      success: true
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
+});
 app.delete("/jobcards/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -809,7 +877,6 @@ app.put("/invoices/:id/cashout", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
-
 app.get("/api/dashboard", async (req, res) => {
   try {
     const [sales] = await db.query(
@@ -826,10 +893,23 @@ app.get("/api/dashboard", async (req, res) => {
       GROUP BY status
     `);
 
+    // HISTOGRAM DATA
+    const [salesByDate] = await db.query(`
+      SELECT 
+        DATE(closed_at) AS date,
+        SUM(amount) AS total
+      FROM job_card
+      WHERE amount IS NOT NULL
+      and status='Cashed'
+      GROUP BY DATE(closed_at)
+      ORDER BY DATE(closed_at)
+    `);
+
     res.json({
       totalSales: sales[0].total,
       totalCards: cards[0].total,
-      statusStats: stats
+      statusStats: stats,
+      salesByDate
     });
 
   } catch (err) {

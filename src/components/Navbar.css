@@ -120,3 +120,19 @@
     z-index: 900;
   }
 }
+/* Hide the button by default (Desktop/Laptop) */
+.menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: aqua; /* or whatever color fits your theme */
+}
+
+/* 📱 Show the button only on mobile screens */
+@media (max-width: 768px) {
+  .menu-btn {
+    display: block; 
+  }
+}

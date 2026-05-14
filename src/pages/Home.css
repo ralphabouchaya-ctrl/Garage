@@ -90,3 +90,14 @@
     flex: 1 1 100%; /* stack cards */
   }
 }
+.histogram {
+  margin-top: 40px;
+  background: #0f172a;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.histogram h2 {
+  color: white;
+  margin-bottom: 20px;
+}

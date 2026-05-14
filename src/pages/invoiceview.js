@@ -19,31 +19,8 @@ export default function InvoiceView() {
     const [showVehicleDropdown, setShowVehicleDropdown] = useState(false);
     const [customerSearch, setCustomerSearch] = useState("");
     const [vehicleSearch, setVehicleSearch] = useState("");
-    const handleDelete = async (id) => {
-        try {
-            await axios.delete(`http://localhost:5000/jobcards/${id}`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-
-            setJobCards(jobCards.filter(job => job.job_card_id !== id));
-
-            alert("Job card deleted successfully ✅");
-
-        } catch (err) {
-            console.error(err);
-
-
-            alert(err.response?.data?.message ||
-                err.response?.data ||
-                "Failed to delete job card ❌"
-            );
-        }
-
-        setTimeout(() => setMessage(""), 3000);
-    };
     const [selectedCustomer, setSelectedCustomer] = useState("");
     const [selectedVehicle, setSelectedVehicle] = useState("");
-
     const [jobData, setJobData] = useState({ due_date: "" });
     const [tasks, setTasks] = useState([]);
 
@@ -65,9 +42,9 @@ export default function InvoiceView() {
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
 
-useEffect(() => {
-    fetchJobCards(statusFilter, dateFilter);
-}, [statusFilter, dateFilter]);
+    useEffect(() => {
+        fetchJobCards(statusFilter, dateFilter);
+    }, [statusFilter, dateFilter]);
     // ================= FETCH =================
 
 
@@ -77,12 +54,16 @@ useEffect(() => {
         switch (status) {
             case "not_started":
                 return "status not";
+
             case "in_progress":
                 return "status progress";
+
             case "completed":
                 return "status done";
-            case "invoiced":
+
+            case "Cashed":
                 return "status invoiced";
+
             default:
                 return "status";
         }
@@ -91,42 +72,40 @@ useEffect(() => {
 
 
 
-  const fetchJobCards = async (status = statusFilter, date = dateFilter) => {
-    try {
-        const res = await axios.get("http://localhost:5000/getinvoices", {
-            headers: { Authorization: `Bearer ${token}` },
-            params: {
-                status,
-                date,
-            },
-        });
+    const fetchJobCards = async (status = statusFilter, date = dateFilter) => {
+        try {
+            const res = await axios.get("http://localhost:5000/getinvoices", {
+                headers: { Authorization: `Bearer ${token}` },
+                params: {
+                    status,
+                    date,
+                },
+            });
 
-        setJobCards(Array.isArray(res.data) ? res.data : []);
-    } catch (err) {
-        console.error(err);
-        setJobCards([]);
-    }
-};
-const filteredJobCards = jobCards.filter((job) => {
-  const value = search.toLowerCase();
+            setJobCards(Array.isArray(res.data) ? res.data : []);
+        } catch (err) {
+            console.error(err);
+            setJobCards([]);
+        }
+    };
+   const filteredJobCards = jobCards.filter((job) => {
+    const value = search.toLowerCase();
 
-  return (
-    job.vehicle?.toLowerCase().includes(value) ||
-    job.customer?.toLowerCase().includes(value) ||
-    job.status?.toLowerCase().includes(value) ||
-    String(job.job_card_id).includes(value) ||
-    String(job.total).includes(value)
-  );
+    return (
+        job.vehicle?.toLowerCase().startsWith(value) ||
+        job.customer?.toLowerCase().startsWith(value)
+       
+    );
 });
     return (
         <div className="jobcard-container">
             <div className="header">
 
-              <input
-  placeholder="Search card..."
-  value={search}
-  onChange={(e) => setSearch(e.target.value)}
-/>
+                <input
+                    placeholder="Search card..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                />
 
                 {/* STATUS FILTER */}
                 <select
@@ -141,13 +120,14 @@ const filteredJobCards = jobCards.filter((job) => {
                 </select>
 
                 {/* DATE FILTER */}
-                <input
-                    type="date"
-                    value={dateFilter}
-                    onChange={(e) => setDateFilter(e.target.value)}
-                />
+                <div className="field full">
+                    <input
+                        type="date"
+                        value={dateFilter}
+                        onChange={(e) => setDateFilter(e.target.value)}
+                    />
+                </div>
 
-            
 
             </div>
 
@@ -167,7 +147,7 @@ const filteredJobCards = jobCards.filter((job) => {
 
                 <tbody>
                     {Array.isArray(jobCards) &&
-                       filteredJobCards.map((job) => (
+                        filteredJobCards.map((job) => (
                             <tr key={job.job_card_id}>
                                 <td>
                                     <div className="action-buttons">

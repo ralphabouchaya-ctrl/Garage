@@ -7,7 +7,29 @@
   color: #e2e8f0;
   font-family: "Inter", sans-serif;
 }
+/* ================= STATUS ================= */
+.status {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  text-transform: capitalize;
+  font-weight: 600;
+}
+.field input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
 
+
+
+/* GREEN STATUS */
+.status.not,
+.status.progress,
+.status.done,
+.status.invoiced {
+  background: rgba(5, 225, 86, 0.2);
+  color: #08cc50;
+}
 /* ================= HEADER ================= */
 .header {
   display: flex;

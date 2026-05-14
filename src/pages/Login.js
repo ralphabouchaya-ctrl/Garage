@@ -39,11 +39,6 @@ export default function Login() {
       return;
     }
 
-    // (fallback - if you ever skip 2FA in future)
-    if (res.data.token) {
-      sessionStorage.setItem("token", res.data.token);
-      window.location.href = "/home";
-    }
 
   } catch (err) {
     showMessage(
@@ -54,6 +49,7 @@ export default function Login() {
 };
   return (
     <div className="login-container">
+    <header className="header">Abou chaaya garage</header>
       <div className="login-box">
         <h2>Login</h2>
 

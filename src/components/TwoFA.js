@@ -37,8 +37,30 @@ export default function TwoFA() {
     newCode[index] = value;
     setCode(newCode);
 
-    // auto focus next
+    // move forward
     if (value && index < 5) {
+      document.getElementById(`digit-${index + 1}`).focus();
+    }
+  };
+
+  const handleKeyDown = (e, index) => {
+    // backspace → previous input
+    if (e.key === "Backspace" && !code[index] && index > 0) {
+      document.getElementById(`digit-${index - 1}`).focus();
+    }
+
+    // enter → verify
+    if (e.key === "Enter") {
+      handleVerify();
+    }
+
+    // left arrow
+    if (e.key === "ArrowLeft" && index > 0) {
+      document.getElementById(`digit-${index - 1}`).focus();
+    }
+
+    // right arrow
+    if (e.key === "ArrowRight" && index < 5) {
       document.getElementById(`digit-${index + 1}`).focus();
     }
   };
@@ -91,6 +113,7 @@ export default function TwoFA() {
               maxLength="1"
               value={digit}
               onChange={(e) => handleChange(e.target.value, i)}
+              onKeyDown={(e) => handleKeyDown(e, i)}
             />
           ))}
         </div>

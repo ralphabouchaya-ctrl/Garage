@@ -3,8 +3,7 @@ import "./jobcard-details.css";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { Pencil } from "lucide-react";
-
+import { Pencil, Trash2 } from "lucide-react";
 export default function JobCardDetails() {
     const { id } = useParams();
     const token = localStorage.getItem("token");
@@ -43,7 +42,36 @@ export default function JobCardDetails() {
             console.error("JOB FETCH ERROR:", err.response?.data || err.message);
         }
     };
+    const handleDeleteTask = async (task) => {
+        if (task.status !== "not_started") {
+            alert("Only not started tasks can be deleted");
+            return;
+        }
 
+        const confirmDelete = window.confirm(
+            "Delete this task?"
+        );
+
+        if (!confirmDelete) return;
+
+        try {
+            await axios.delete(
+                `http://localhost:5000/tasks/${task.task_id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            fetchTasks();
+            fetchJobDetails();
+
+        } catch (err) {
+            console.error(err);
+            alert("Failed to delete task");
+        }
+    };
     // 🟣 Fetch tasks
     const fetchTasks = async () => {
         try {
@@ -165,13 +193,25 @@ export default function JobCardDetails() {
                     {tasks.map((task) => (
                         <tr key={task.task_id}>
                             <td>
-                                <button
-                                    className="edit-btn"
-                                    onClick={() => handleEdit(task)}
-                                >
-                                    <Pencil size={16} />
-                                </button>
+                                <div className="action-buttons">
 
+                                    <button
+                                        className="edit-btn"
+                                        onClick={() => handleEdit(task)}
+                                    >
+                                        <Pencil size={16} />
+                                    </button>
+
+                                    {task.status === "not_started" && (
+                                        <button
+                                            className="delete-btn"
+                                            onClick={() => handleDeleteTask(task)}
+                                        >
+                                            <Trash2 size={16} />
+                                        </button>
+                                    )}
+
+                                </div>
                             </td>
                             <td>{task.description}</td>
                             <td>{task.desc}</td>

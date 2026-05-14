@@ -5,9 +5,14 @@ import {
   Pie,
   Cell,
   Tooltip,
-  Legend
+  Legend,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  ResponsiveContainer
 } from "recharts";
-
 import "./Home.css";
 
 const COLORS = ["#4CAF50", "#2196F3", "#FFC107", "#9E9E9E"];
@@ -16,19 +21,15 @@ export default function Home() {
   const [data, setData] = useState({
     totalSales: 0,
     totalCards: 0,
-    statusStats: []
+    statusStats: [],
+    salesByDate: []
   });
 
   const [message, setMessage] = useState("");
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
-
-    if (!token) {
-      window.location.href = "/";
-      return;
-    }
+   
 
     const msg = sessionStorage.getItem("loginMessage");
 
@@ -92,7 +93,7 @@ export default function Home() {
             </h2>
             <p>Pending</p>
           </div>
-            <div className="card red">
+          <div className="card red">
             <h2>
               {
                 data.statusStats.find(s => s.status === "not_started")?.count || 0
@@ -120,7 +121,39 @@ export default function Home() {
             <Tooltip />
             <Legend />
           </PieChart>
+
+
+          <ResponsiveContainer width="100%" height={350}>
+            <BarChart data={data.salesByDate}>
+              <CartesianGrid strokeDasharray="3 3" />
+
+              <XAxis
+                dataKey="date"
+                stroke="#151313"
+                tickFormatter={(date) =>
+                  new Date(date).toLocaleDateString()
+                }
+              />
+
+              <YAxis stroke="#101010" />
+
+              <Tooltip
+                labelFormatter={(label) =>
+                  new Date(label).toLocaleDateString("en-GB", {
+                    weekday: "short",
+                    year: "numeric",
+                    month: "short",
+                    day: "2-digit",
+                  })
+                }
+              />
+
+              <Bar dataKey="total" fill="#4caf50" radius={[6, 6, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+
         </div>
+
 
       </div>
     </>

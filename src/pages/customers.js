@@ -186,7 +186,16 @@ export default function Customers() {
                         </div>
 
                         <div className="modal-actions">
-                            <button className="btn-cancel" onClick={() => setShowModal(false)}>
+                            <button className="btn-cancel" onClick={() => {
+                                setShowModal(false);
+
+                                setForm({
+                                    first_name: '',
+                                    last_name: '',
+                                    email: '',
+                                    phone: ''
+                                });
+                            }}>
                                 Cancel
                             </button>
                             <button className="btn-save" onClick={handleSubmit}>

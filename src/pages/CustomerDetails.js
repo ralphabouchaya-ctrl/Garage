@@ -30,14 +30,7 @@ export default function CustomerDetails() {
     const [editId, setEditId] = useState(null);
     const navigate = useNavigate();
     // Load vehicles
-    const fetchEngines = async () => {
-        try {
-            const res = await axios.get("http://localhost:5000/engines");
-            setEngines(res.data);
-        } catch (err) {
-            console.error(err);
-        }
-    };
+
     const fetchCustomer = async () => {
         try {
             const res = await axios.get(`http://localhost:5000/customers/${id}`);
@@ -57,6 +50,14 @@ export default function CustomerDetails() {
         try {
             const res = await axios.get("http://localhost:5000/models");
             setModels(res.data);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+    const fetchEngines = async () => {
+        try {
+            const res = await axios.get("http://localhost:5000/engines");
+            setEngines(res.data);
         } catch (err) {
             console.error(err);
         }
@@ -231,7 +232,7 @@ export default function CustomerDetails() {
                                         .filter((m) =>
                                             `${m.name || ""} ${m.code || ""}`
                                                 .toLowerCase()
-                                                .includes((modelSearch || "").toLowerCase())
+                                                .startsWith((modelSearch || "").toLowerCase())
                                         )
                                         .map((m) => (
                                             <div
@@ -350,7 +351,17 @@ export default function CustomerDetails() {
                         </div>
 
                         <div className="modal-actions">
-                            <button onClick={() => setShowModal(false)}>
+                            <button onClick={() => {
+                                setShowModal(false);
+
+                                setForm({
+                                    model_id: "",
+                                    year: "",
+                                    engine_id: "",
+                                    gear: "",
+                                    plate_number: "",
+                                });
+                            }}>
                                 Cancel
                             </button>
 

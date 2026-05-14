@@ -1,55 +1,94 @@
 .login-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column; /* Stack header and box vertically */
+  justify-content: center; 
   align-items: center;
-
-  min-height: 100vh; /* better than height */
-  padding: 20px;     /* prevents edge touching on mobile */
+  background-color: #0b1b2b;
+  min-height: 100vh;
+  padding: 20px;
   box-sizing: border-box;
-
   font-family: Arial, sans-serif;
+}
+
+.header {
+  font-size: clamp(40px, 10vw, 100px); /* Responsive font size so it doesn't break on mobile */
+  color: aqua;
+  margin-bottom: 20px; /* Creates space between header and box */
+  text-align: center;
+  /* Removed position: fixed to keep it in the layout flow */
 }
 
 .login-box {
   width: 100%;
-  max-width: 350px;   /* responsive cap */
-  
+  max-width: 350px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-
   padding: 20px;
   border-radius: 10px;
-  background: #fff;
+  background: #5783fc;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-.login-box input {
+login-box input {
+
   padding: 12px;
+
   font-size: 14px;
-  border: 1px solid #ccc;
+
+  border: 1px solid #460cba;
+
   border-radius: 6px;
+
 }
 
+
+
 .login-box button {
+
   padding: 12px;
+
   font-size: 14px;
+
   cursor: pointer;
+
   border: none;
+
   border-radius: 6px;
+
   background: #007bff;
+
   color: white;
+
+}
+
+.login-box h2 {
+  margin: 0 0 10px 0; /* Removes default top margin, adds space below */
+  text-align: center;   /* Centers the text horizontally */
+  color: white;         /* Makes it readable against the blue background */
+  font-size: 24px;
 }
 
 /* 🔽 Mobile fine-tuning */
+
 @media (max-width: 480px) {
+
   .login-box {
+
     max-width: 100%;
+
     padding: 15px;
+
   }
 
+
+
   .login-box input,
+
   .login-box button {
+
     font-size: 16px; /* better tap usability */
+
   }
+
 }

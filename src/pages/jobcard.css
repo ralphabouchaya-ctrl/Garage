@@ -31,6 +31,14 @@
 .message.error {
   background: #dc2626;
 }
+.overdue-row {
+  background: rgba(239, 68, 68, 0.12);
+  border-left: 4px solid #ef4444;
+}
+
+.overdue-row:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
 /* --- MAIN CARD --- */
 .modal-card, .modal-content {
   background: #173361;
@@ -43,6 +51,10 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   animation: modalScale 0.2s ease-out;
+}
+.field input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
 }
 
 @keyframes modalScale {
@@ -279,4 +291,10 @@
   .modal-content h3 {
     font-size: 1.25rem;
   }
+}
+.field-error {
+  color: #ff4d4f;
+  font-size: 12px;
+  margin-bottom: 4px;
+  font-weight: 500;
 }

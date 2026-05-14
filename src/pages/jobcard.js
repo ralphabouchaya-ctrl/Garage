@@ -18,6 +18,16 @@ export default function JobCard() {
   const [customerSearch, setCustomerSearch] = useState("");
   const [vehicleSearch, setVehicleSearch] = useState("");
   const [services, setServices] = useState([]);
+  const [models, setModels] = useState([]);
+  const [engines, setEngines] = useState([]);
+
+  const [modelSearch, setModelSearch] = useState("");
+  const [engineSearch, setEngineSearch] = useState("");
+
+  const [showModelDropdown, setShowModelDropdown] = useState(false);
+  const [showEngineDropdown, setShowEngineDropdown] = useState(false);
+  const [showYearDropdown, setShowYearDropdown] = useState(false);
+  const [plateError, setPlateError] = useState("");
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this job card?"
@@ -58,11 +68,12 @@ export default function JobCard() {
     email: "",
     phone: "",
   });
-  const total = tasks.reduce((sum, t) => sum + Number(t.fees || 0), 0)
+  const total = tasks.reduce((sum, t) => sum + Number(t.fees || 0), 0);
+  const years = Array.from({ length: 2025 - 1990 + 1 }, (_, i) => 1990 + i);
   const [vehicleForm, setVehicleForm] = useState({
-    model: "",
+    model_id: "",
     year: "",
-    engine: "",
+    engine_id: "",
     gear: "",
     plate_number: "",
   });
@@ -74,6 +85,8 @@ export default function JobCard() {
     fetchJobCards();
     fetchCustomers();
     fetchServices();
+    fetchModels();
+    fetchEngines();
   }, []);
   const fetchServices = async () => {
     try {
@@ -125,7 +138,19 @@ export default function JobCard() {
     });
     setCustomers(res.data);
   };
+  const isOverdue = (dueDate, status) => {
+    // ignore completed jobs
+    if (status === "completed") return false;
 
+    const today = new Date();
+    const due = new Date(dueDate);
+
+    // remove time comparison
+    today.setHours(0, 0, 0, 0);
+    due.setHours(0, 0, 0, 0);
+
+    return due < today;
+  };
   const fetchVehicles = async (customerId) => {
     const res = await axios.get(
       `http://localhost:5000/vehicles/customer/${customerId}`,
@@ -134,7 +159,22 @@ export default function JobCard() {
     console.log(res.data);
     setVehicles(res.data);
   };
-
+  const fetchModels = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/models");
+      setModels(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  const fetchEngines = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/engines");
+      setEngines(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
   // ================= STATUS =================
   const getStatusClass = (status) => {
     switch (status) {
@@ -157,40 +197,40 @@ export default function JobCard() {
   };
 
   // ================= CREATE JOB =================
- const handleCreateJob = async () => {
-  if (!selectedCustomer || !selectedVehicle || !jobData.due_date) {
-    alert("Please fill all fields");
-    return;
-  }
+  const handleCreateJob = async () => {
+    if (!selectedCustomer || !selectedVehicle || !jobData.due_date) {
+      alert("Please fill all fields");
+      return;
+    }
 
-  try {
-    const res = await axios.post(
-      "http://localhost:5000/jobcards",
-      {
-        vehicle_id: selectedVehicle,
-        due_date: jobData.due_date,
-        tasks: tasks   // ✅ ADD THIS LINE
-      },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/jobcards",
+        {
+          vehicle_id: selectedVehicle,
+          due_date: jobData.due_date,
+          tasks: tasks   // ✅ ADD THIS LINE
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-    alert("Job created successfully! ID: " + res.data.job_card_id);
+      alert("Job created successfully! ID: " + res.data.job_card_id);
 
-    setShowJobModal(false);
-    fetchJobCards();
+      setShowJobModal(false);
+      fetchJobCards();
 
-    // optional reset
-    setTasks([]);
+      // optional reset
+      setTasks([]);
 
-  } catch (err) {
-    alert("Error: " + (err.response?.data?.message || err.message));
-  }
-};
+    } catch (err) {
+      alert("Error: " + (err.response?.data?.message || err.message));
+    }
+  };
 
   return (
     <div className="jobcard-container">
       <div className="header">
-        <input placeholder="search card..."
+        <input placeholder="Search card..."
           value={search}
           onChange={(e) => handleSearch(e.target.value)} />
         <button className="add-btn" onClick={() => setShowJobModal(true)}>
@@ -215,7 +255,14 @@ export default function JobCard() {
         <tbody>
           {Array.isArray(jobCards) &&
             jobCards.map((job) => (
-              <tr key={job.job_card_id}>
+              <tr
+                key={job.job_card_id}
+                className={
+                  isOverdue(job.due_date || job.closed_at, job.status)
+                    ? "overdue-row"
+                    : ""
+                }
+              >
                 <td>
                   <div className="action-buttons">
 
@@ -383,6 +430,7 @@ export default function JobCard() {
                 <label>Due Date</label>
                 <input
                   type="date"
+                  min={new Date().toISOString().split("T")[0]}
                   value={jobData.due_date}
                   onChange={(e) =>
                     setJobData({ ...jobData, due_date: e.target.value })
@@ -434,7 +482,7 @@ export default function JobCard() {
                       }}
                     />
 
-                 
+
 
                     <input
                       type="number"
@@ -558,56 +606,193 @@ export default function JobCard() {
       )}
 
       {/* VEHICLE MODAL */}
+      {/* VEHICLE MODAL */}
       {showVehicleModal && (
         <div className="modal">
           <div className="modal-content">
             <h3>Add Vehicle</h3>
 
-            <input
-              placeholder="Model"
-              value={vehicleForm.model}
-              onChange={(e) =>
-                setVehicleForm({ ...vehicleForm, model: e.target.value })
-              }
-            />
+            {/* MODEL */}
+            <div className="field select-search">
+              <label>Model</label>
 
-            <input
-              placeholder="Year"
-              value={vehicleForm.year}
-              onChange={(e) =>
-                setVehicleForm({ ...vehicleForm, year: e.target.value })
-              }
-            />
+              <input
+                placeholder="Search model..."
+                value={modelSearch}
+                onFocus={() => setShowModelDropdown(true)}
+                onChange={(e) => {
+                  setModelSearch(e.target.value);
+                  setShowModelDropdown(true);
+                }}
+              />
 
-            <input
-              placeholder="Engine"
-              value={vehicleForm.engine}
-              onChange={(e) =>
-                setVehicleForm({ ...vehicleForm, engine: e.target.value })
-              }
-            />
+              {showModelDropdown && (
+                <div className="dropdown">
+                  {models
+                    .filter((m) =>
+                      `${m.name || ""} ${m.code || ""}`
+                        .toLowerCase()
+                        .includes(modelSearch.toLowerCase())
+                    )
+                    .map((m) => (
+                      <div
+                        key={m.id}
+                        className="dropdown-item"
+                        onClick={() => {
+                          setVehicleForm({
+                            ...vehicleForm,
+                            model_id: m.id,
+                          });
 
-            <select
-              value={vehicleForm.gear}
-              onChange={(e) =>
-                setVehicleForm({ ...vehicleForm, gear: e.target.value })
-              }
-            >
-              <option value="">Select Gear</option>
-              <option value="auto">Automatic</option>
-              <option value="manual">Manual</option>
-            </select>
+                          setModelSearch(m.name);
+                          setShowModelDropdown(false);
+                        }}
+                      >
+                        {m.name}
+                      </div>
+                    ))}
+                </div>
+              )}
+            </div>
 
-            <input
-              placeholder="Plate Number"
-              value={vehicleForm.plate_number}
-              onChange={(e) =>
-                setVehicleForm({
-                  ...vehicleForm,
-                  plate_number: e.target.value,
-                })
-              }
-            />
+            {/* YEAR */}
+            <div className="field select-search">
+              <label>Year</label>
+
+              <input
+                placeholder="Search year..."
+                value={vehicleForm.year}
+                onFocus={() => setShowYearDropdown(true)}
+                onChange={(e) => {
+                  setVehicleForm({
+                    ...vehicleForm,
+                    year: e.target.value,
+                  });
+
+                  setShowYearDropdown(true);
+                }}
+              />
+
+              {showYearDropdown && (
+                <div className="dropdown">
+                  {years
+                    .filter((y) =>
+                      y.toString().includes(vehicleForm.year)
+                    )
+                    .slice(0, 10)
+                    .map((y) => (
+                      <div
+                        key={y}
+                        className="dropdown-item"
+                        onClick={() => {
+                          setVehicleForm({
+                            ...vehicleForm,
+                            year: y,
+                          });
+
+                          setShowYearDropdown(false);
+                        }}
+                      >
+                        {y}
+                      </div>
+                    ))}
+                </div>
+              )}
+            </div>
+
+            {/* ENGINE */}
+            <div className="field select-search">
+              <label>Engine</label>
+
+              <input
+                placeholder="Search engine..."
+                value={engineSearch}
+                onFocus={() => setShowEngineDropdown(true)}
+                onChange={(e) => {
+                  setEngineSearch(e.target.value);
+                  setShowEngineDropdown(true);
+                }}
+              />
+
+              {showEngineDropdown && (
+                <div className="dropdown">
+                  {engines
+                    .filter((e) =>
+                      `${e.name || ""} ${e.code || ""}`
+                        .toLowerCase()
+                        .includes(engineSearch.toLowerCase())
+                    )
+                    .map((e) => (
+                      <div
+                        key={e.id}
+                        className="dropdown-item"
+                        onClick={() => {
+                          setVehicleForm({
+                            ...vehicleForm,
+                            engine_id: e.id,
+                          });
+
+                          setEngineSearch(e.name);
+                          setShowEngineDropdown(false);
+                        }}
+                      >
+                        {e.name}
+                      </div>
+                    ))}
+                </div>
+              )}
+            </div>
+
+            {/* GEAR */}
+            <div className="field">
+              <label>Gear</label>
+
+              <select
+                value={vehicleForm.gear}
+                onChange={(e) =>
+                  setVehicleForm({
+                    ...vehicleForm,
+                    gear: e.target.value,
+                  })
+                }
+              >
+                <option value=""></option>
+                <option value="auto">Automatic</option>
+                <option value="manual">Manual</option>
+              </select>
+            </div>
+
+            {/* PLATE */}
+            <div className="field">
+              {plateError && (
+                <div className="field-error">{plateError}</div>
+              )}
+
+              <label>Plate Number</label>
+
+              <input
+                placeholder="Plate Number"
+                value={vehicleForm.plate_number}
+                maxLength={7}
+                onChange={(e) => {
+                  let val = e.target.value.toUpperCase();
+
+                  if (!/^[A-Z]?\d{0,6}$/.test(val)) return;
+
+                  setVehicleForm({
+                    ...vehicleForm,
+                    plate_number: val,
+                  });
+
+                  // live validation message
+                  if (val && !/^[A-Z][0-9]{6}$/.test(val)) {
+                    setPlateError("Plate must be 1 letter + 6 digits (A123456)");
+                  } else {
+                    setPlateError("");
+                  }
+                }}
+              />
+            </div>
 
             <div className="modal-actions">
               <button onClick={() => setShowVehicleModal(false)}>
@@ -627,20 +812,29 @@ export default function JobCard() {
                       ...vehicleForm,
                       cust_id: selectedCustomer,
                     },
-                    { headers: { Authorization: `Bearer ${token}` } }
+                    {
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                      },
+                    }
                   );
 
                   setShowVehicleModal(false);
+
                   fetchVehicles(selectedCustomer);
+
                   setSelectedVehicle(res.data.vehc_id);
 
                   setVehicleForm({
-                    model: "",
+                    model_id: "",
                     year: "",
-                    engine: "",
+                    engine_id: "",
                     gear: "",
                     plate_number: "",
                   });
+
+                  setModelSearch("");
+                  setEngineSearch("");
                 }}
               >
                 Save
@@ -649,7 +843,6 @@ export default function JobCard() {
           </div>
         </div>
       )}
-
     </div>
 
   )

@@ -18,11 +18,11 @@ function App() {
     <BrowserRouter>
       <Routes>
 
-        {/* 🔓 Public */}
+       
         <Route path="/" element={<Login />} />
         <Route path="/2fa" element={<TwoFA />} />
 
-        {/* 🔐 Protected + 2FA required */}
+        
         <Route
           path="/home"
           element={

@@ -30,7 +30,7 @@ export default function Navbar() {
 
       {/* ⬅ Sidebar */}
       <div className={`sidebar ${sidebarOpen ? "active" : ""}`}>
-        <div className="logo">Garage</div>
+        <div className="logo">Abou Chaaya Garage</div>
 
         <nav className="nav-links">
           <NavLink to="/home" className="link" onClick={() => setSidebarOpen(false)}>

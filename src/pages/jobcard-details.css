@@ -217,7 +217,23 @@
     max-width: 90%;
   }
 }
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
 
+.delete-btn {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background: #ef4444;
+}
 
 /* 🔽 MOBILE */
 @media (max-width: 480px) {

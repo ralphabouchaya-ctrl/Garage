@@ -1,27 +1,14 @@
 body {
-  margin: 0;
-  background:  #94a3b8;
-  min-height: 100vh;
-  font-family: 'Inter', system-ui, sans-serif;
-  color: #f1f5f9;
+  background: #bcaf9d; /* beige background like your image */
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-.content-area {
-  background: #ffffff; /* The bright white "back" */
-  margin-left: 220px;  /* Space for your sidebar */
-  margin-top: 60px;    /* Space for your topbar */
-  padding: 40px;       /* Extra breathing room */
-  min-height: calc(100vh - 60px);
-
-}
 .container {
-  max-width: 1100px;
-  margin: 40px auto;
-  padding: 24px;
-  background:linear-gradient(180deg, #0b1b2b, #102a43); /* Subtle glass effect */
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  backdrop-filter: blur(10px);
+   background: #0b1b2b; /* Deep Navy from screenshot */
+  padding: 40px;
+  border-radius: 12px;
+  min-height: 100vh;
+  color: #e2e8f0
 }
 
 .header {
