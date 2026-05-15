@@ -64,7 +64,7 @@ export default function InvoicePage() {
       return;
     }
 
-   
+    // ❗ 2. Optional: check if already cashed (depends on your backend)
   
       await axios.put(
         `http://localhost:5000/invoices/${id}/cashout`,
@@ -80,7 +80,7 @@ export default function InvoicePage() {
     }
   };
 
-  //  LOADING SAFE
+  // ✅ LOADING SAFE
   if (!jobInfo) return <div>Loading...</div>;
 
   return (

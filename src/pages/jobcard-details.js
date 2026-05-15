@@ -107,7 +107,6 @@ export default function JobCardDetails() {
             case "not_started": return "status not";
             case "in_progress": return "status progress";
             case "completed": return "status done";
-            case "invoiced": return "status invoiced";
             default: return "status";
         }
     };
@@ -279,15 +278,7 @@ export default function JobCardDetails() {
                             />
                         </div>
 
-                        {/* <select
-              onChange={(e)=>setNewTask({...newTask, status:e.target.value})}
-            >
-              <option value="not_started">Not Started</option>
-              <option value="in_progress">In Progress</option>
-              <option value="completed">Completed</option>
-              <option value="invoiced">Invoiced</option>
-            </select> */}
-
+                      
                         <div className="modal-actions">
                             <button onClick={() => setShowAddModal(false)}>Cancel</button>
                             <button onClick={handleAddTask}>Save</button>
@@ -372,7 +363,6 @@ export default function JobCardDetails() {
                                 <option value="not_started">Not Started</option>
                                 <option value="in_progress">In Progress</option>
                                 <option value="completed">Completed</option>
-                                <option value="invoiced">Invoiced</option>
                             </select>
                         </div>
                         {/* FEE */}

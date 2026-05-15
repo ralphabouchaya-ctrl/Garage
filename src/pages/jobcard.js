@@ -197,11 +197,30 @@ export default function JobCard() {
   };
 
   // ================= CREATE JOB =================
-  const handleCreateJob = async () => {
-    if (!selectedCustomer || !selectedVehicle || !jobData.due_date) {
-      alert("Please fill all fields");
-      return;
-    }
+const resetJobCardForm = () => {
+  setSelectedCustomer("");
+  setSelectedVehicle("");
+
+  setCustomerSearch("");
+  setVehicleSearch("");
+
+  setVehicles([]);
+
+  setJobData({
+    due_date: "",
+  });
+
+  setTasks([]);
+
+  setShowCustomerDropdown(false);
+  setShowVehicleDropdown(false);
+};
+
+const handleCreateJob = async () => {
+  if (!selectedCustomer || !selectedVehicle || !jobData.due_date) {
+    alert("Please fill all fields");
+    return;
+  }
 
     try {
       const res = await axios.post(
@@ -515,7 +534,10 @@ export default function JobCard() {
             {/* FOOTER */}
             <div className="modal-footer">
               <button onClick={handleCreateJob}>Create</button>
-              <button onClick={() => setShowJobModal(false)}>Cancel</button>
+              <button onClick={() => {
+                resetJobCardForm();
+                setShowJobModal(false);
+              }}>Cancel</button>
             </div>
 
           </div>

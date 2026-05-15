@@ -352,7 +352,7 @@ app.get("/jobcards", async (req, res) => {
     if (search) {
       query += `
         AND (
-          v.model LIKE ? OR
+          m.name LIKE ? OR
           CONCAT(c.first_name, ' ', c.last_name) LIKE ?
         )
       `;
@@ -875,11 +875,11 @@ app.put("/invoices/:id/cashout", async (req, res) => {
 app.get("/api/dashboard", async (req, res) => {
   try {
     const [sales] = await db.query(
-      "SELECT IFNULL(SUM(amount),0) AS total FROM job_card"
+      "SELECT IFNULL(SUM(amount),0) AS total FROM job_card where status !='Cashed'"
     );
 
     const [cards] = await db.query(
-      "SELECT COUNT(*) AS total FROM job_card"
+      "SELECT COUNT(*) AS total FROM job_card where status !='cashed' "
     );
 
     const [stats] = await db.query(`
