@@ -84,7 +84,7 @@ export default function CustomerDetails() {
 
     // ADD / UPDATE vehicle
     const handleSubmit = async () => {
-        // ✅ REQUIRED FIELDS CHECK
+        //  REQUIRED FIELDS CHECK
         if (
             !form.model_id ||
             !form.year ||
@@ -122,7 +122,7 @@ export default function CustomerDetails() {
             fetchVehicles();
 
         } catch (err) {
-            // ✅ HANDLE DUPLICATE PLATE ERROR
+            //  HANDLE DUPLICATE PLATE ERROR
             alert(
                 err.response?.data?.message ||
                 err.response?.data?.error ||
@@ -140,7 +140,7 @@ export default function CustomerDetails() {
             plate_number: v.plate_number,
         });
 
-        // ✅ set display values for inputs
+        //  set display values for inputs
         setModelSearch(v.model_name);
         setEngineSearch(v.engine_name);
 

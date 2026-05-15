@@ -348,7 +348,7 @@ app.get("/jobcards", async (req, res) => {
 
     const params = [];
 
-    // 🔥 SEARCH LOGIC
+    // SEARCH LOGIC
     if (search) {
       query += `
         AND (
@@ -609,7 +609,7 @@ const updateJobStatus = async (job_card_id) => {
     [newStatus, job_card_id]
   );
 
-  // Optional: get total fees
+ 
   const [[totalResult]] = await db.query(
     `SELECT SUM(fees) AS total FROM job_task WHERE job_card_id = ?`,
     [job_card_id]
@@ -726,7 +726,7 @@ app.delete("/jobcards/:id", async (req, res) => {
       [id]
     );
 
-    // ❌ block delete if ANY task is not "not_started"
+    //  block delete if ANY task is not "not_started"
     const hasActiveTask = tasks.some(
       (t) => t.status !== "not_started"
     );
@@ -800,7 +800,7 @@ app.get("/invoices/:id", async (req, res) => {
       [id]
     );
 
-    // ✅ FINAL RESPONSE (IMPORTANT STRUCTURE)
+    //  FINAL RESPONSE (IMPORTANT STRUCTURE)
     res.json({
       job: jobRows[0],
       tasks: taskRows
@@ -834,13 +834,13 @@ app.get("/getinvoices", async (req, res) => {
 
     const params = [];
 
-    // ✅ filter by status
+    //  filter by status
     if (status) {
       query += " AND jc.status = ?";
       params.push(status);
     }
 
-    // ✅ filter by date (YYYY-MM-DD)
+    //  filter by date (YYYY-MM-DD)
     if (date) {
       query += " AND DATE(jc.opened_at) = ?";
       params.push(date);

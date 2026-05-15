@@ -94,7 +94,7 @@ export default function TwoFA() {
       <div className="twofa-box">
         <h2>Two-factor Authentication</h2>
 
-        {/* ✅ QR (only first time) */}
+        {/* QR (only first time) */}
         {qr && (
           <div className="qr-section">
             <p>Scan this QR code with Google Authenticator</p>
@@ -104,7 +104,7 @@ export default function TwoFA() {
 
         <p>Enter 6-digit code</p>
 
-        {/* 🔢 Input */}
+
         <div className="code-inputs">
           {code.map((digit, i) => (
             <input

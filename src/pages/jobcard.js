@@ -42,7 +42,7 @@ export default function JobCard() {
 
       setJobCards(jobCards.filter(job => job.job_card_id !== id));
 
-      alert("Job card deleted successfully ✅");
+      alert("Job card deleted successfully ");
 
     } catch (err) {
       console.error(err);
@@ -50,7 +50,7 @@ export default function JobCard() {
       alert(
         err.response?.data?.message ||
         err.response?.data ||
-        "Failed to delete job card ❌"
+        "Failed to delete job card "
       );
     }
 
@@ -214,7 +214,7 @@ export default function JobCard() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      alert("Job created successfully! ID: " + res.data.job_card_id);
+      alert("Job created successfully! ");
 
       setShowJobModal(false);
       fetchJobCards();
@@ -331,7 +331,7 @@ export default function JobCard() {
                     onChange={(e) => {
                       setCustomerSearch(e.target.value);
                       setSelectedCustomer(null);
-                      setShowCustomerDropdown(true);   // ✅ OPEN
+                      setShowCustomerDropdown(true);   //  OPEN
                     }}
                     onFocus={() => setShowCustomerDropdown(true)} // optional UX
                   />
@@ -356,15 +356,15 @@ export default function JobCard() {
                             key={c.cust_id}
                             className="dropdown-item"
                             onClick={() => {
-                              setSelectedCustomer(c.cust_id); // ✅ FIX: store ID only
+                              setSelectedCustomer(c.cust_id); //  FIX: store ID only
                               setCustomerSearch(`${c.first_name} ${c.last_name}`);
 
-                              setShowCustomerDropdown(false); // ✅ CLOSE
+                              setShowCustomerDropdown(false); //  CLOSE
 
                               setSelectedVehicle(null);
                               setVehicleSearch("");
                               setShowVehicleDropdown(true);
-                              fetchVehicles(c.cust_id); // ✅ API CALL
+                              fetchVehicles(c.cust_id); // API CALL
                             }}
                           >
                             {c.first_name} {c.last_name}
@@ -410,10 +410,10 @@ export default function JobCard() {
                             key={v.id}
                             className="dropdown-item"
                             onClick={() => {
-                              setSelectedVehicle(v.vehc_id); // ✅ store ID only
+                              setSelectedVehicle(v.vehc_id); // store ID only
                               setVehicleSearch(`${v.model_name} (${v.plate_number})`);
 
-                              setShowVehicleDropdown(false); // ✅ close dropdown
+                              setShowVehicleDropdown(false); // close dropdown
                             }}
                           >
                             {v.model_name} ({v.plate_number})

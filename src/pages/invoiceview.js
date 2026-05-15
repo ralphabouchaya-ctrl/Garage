@@ -8,20 +8,14 @@ export default function InvoiceView() {
     const [jobCards, setJobCards] = useState([]);
     const [statusFilter, setStatusFilter] = useState("");
     const [dateFilter, setDateFilter] = useState("");
-    const [showJobModal, setShowJobModal] = useState(false);
+  
     const [showCustomerModal, setShowCustomerModal] = useState(false);
     const [showVehicleModal, setShowVehicleModal] = useState(false);
-    const [message, setMessage] = useState("");
+
     const [search, setSearch] = useState("");
-    const [customers, setCustomers] = useState([]);
-    const [showCustomerDropdown, setShowCustomerDropdown] = useState(false);
-    const [vehicles, setVehicles] = useState([]);
-    const [showVehicleDropdown, setShowVehicleDropdown] = useState(false);
-    const [customerSearch, setCustomerSearch] = useState("");
-    const [vehicleSearch, setVehicleSearch] = useState("");
+
     const [selectedCustomer, setSelectedCustomer] = useState("");
-    const [selectedVehicle, setSelectedVehicle] = useState("");
-    const [jobData, setJobData] = useState({ due_date: "" });
+
     const [tasks, setTasks] = useState([]);
 
     const [customerForm, setCustomerForm] = useState({

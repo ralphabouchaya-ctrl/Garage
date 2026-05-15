@@ -13,9 +13,9 @@ export default function Navbar() {
 
   return (
     <>
-      {/* 🔝 Top bar */}
+      {/*  Top bar */}
       <div className="topbar">
-        {/* ☰ Mobile menu button */}
+        {/*  Mobile menu button */}
         <button
           className="menu-btn"
           onClick={() => setSidebarOpen(true)}
@@ -28,7 +28,7 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* ⬅ Sidebar */}
+      {/*  Sidebar */}
       <div className={`sidebar ${sidebarOpen ? "active" : ""}`}>
         <div className="logo">Abou Chaaya Garage</div>
 
@@ -51,7 +51,7 @@ export default function Navbar() {
         </nav>
       </div>
 
-      {/* 🌑 Overlay (click to close) */}
+      {/*  Overlay (click to close) */}
       {sidebarOpen && (
         <div className="overlay" onClick={() => setSidebarOpen(false)} />
       )}
