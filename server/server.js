@@ -596,6 +596,9 @@ const updateJobStatus = async (job_card_id) => {
   if (statuses.every(s => s === "completed")) {
     newStatus = "completed";
   }
+   else if (statuses.some(s => s === "completed")) {
+    newStatus = "in_progress";
+  }
   else if (statuses.some(s => s === "in_progress")) {
     newStatus = "in_progress";
   }
@@ -810,7 +813,7 @@ app.get("/invoices/:id", async (req, res) => {
 });
 app.get("/getinvoices", async (req, res) => {
   try {
-    const { status, date, search } = req.query;
+    const { status, date } = req.query;
 
     let query = `
       SELECT 
@@ -842,15 +845,7 @@ app.get("/getinvoices", async (req, res) => {
       query += " AND DATE(jc.opened_at) = ?";
       params.push(date);
     }
-    if (search) {
-      query += ` AND (
-    v.model LIKE ? OR 
-    CONCAT(c.first_name, ' ', c.last_name) LIKE ?
-  )`;
-
-      const s = `${search}%`;
-      params.push(s, s, s);
-    }
+    
     query += " ORDER BY jc.opened_at DESC";
 
     const [rows] = await db.query(query, params);

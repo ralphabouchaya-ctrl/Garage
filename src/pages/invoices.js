@@ -26,9 +26,7 @@ export default function InvoicePage() {
       console.log("JOB:", jobRes.data);
 
       // handle multiple backend formats
-      const jobData = jobRes.data?.rows
-        ? jobRes.data.rows[0]
-        : jobRes.data;
+      const jobData =  jobRes.data;
 
       setJobInfo(jobData);
 
@@ -91,12 +89,10 @@ export default function InvoicePage() {
       {/* HEADER */}
       <div className="invoice-header">
         <div>
-          <h2>INVOICE</h2>
+          <h2>Abou Chaaya Garage</h2>
+          <h3>Invoice</h3>
           <p><b>Client:</b> {jobInfo?.customer_name || "-"}</p>
           <p><b>Vehicle:</b> {jobInfo?.model || "-"}</p>
-        </div>
-
-        <div>
           <p><b>Plate:</b> {jobInfo?.plate_number || "-"}</p>
           <p><b>Year:</b> {jobInfo?.year || "-"}</p>
         </div>
